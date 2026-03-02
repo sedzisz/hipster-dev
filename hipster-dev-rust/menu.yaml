@@ -1,0 +1,107 @@
+title: "🎩 Hipster Dev Installer"
+header_color: "#FF6B6B"
+border_color: "#4ECDC4"
+
+categories:
+  - name: "Containers"
+    icon: "🐳"
+    items:
+      - name: "Docker Desktop"
+        description: "Container platform"
+        check: "docker --version"
+        install: "brew install --cask docker"
+      
+      - name: "Podman"
+        description: "Docker alternative"
+        check: "podman --version"  
+        install: "brew install podman"
+      
+      - name: "lazydocker"
+        description: "Docker TUI"
+        check: "lazydocker --version"
+        install: "brew install lazydocker"
+
+  - name: "Cloud"
+    icon: "☁️"
+    items:
+      - name: "kubectl"
+        description: "Kubernetes CLI"
+        check: "kubectl version"
+        install: "brew install kubectl"
+      
+      - name: "k9s"
+        description: "Kubernetes TUI"
+        check: "k9s version"
+        install: "brew install k9s"
+      
+      - name: "AWS CLI"
+        description: "AWS Command Line"
+        check: "aws --version"
+        install: "brew install awscli"
+
+  - name: "Shell"
+    icon: "🐚"
+    items:
+      - name: "zsh"
+        description: "Z Shell"
+        check: "zsh --version"
+        install: "brew install zsh"
+      
+      - name: "oh-my-zsh"
+        description: "Zsh framework"
+        check: "test -d ~/.oh-my-zsh"
+        install: "sh -c $(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+      
+      - name: "Nerd Fonts"
+        description: "Developer fonts"
+        check: "ls ~/Library/Fonts | grep -i nerd"
+        install: "brew tap homebrew/cask-fonts && brew install font-meslo-lg-nerd-font"
+
+  - name: "Dev Tools"
+    icon: "🛠"
+    items:
+      - name: "Homebrew"
+        description: "Package manager"
+        check: "brew --version"
+        install: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+      
+      - name: "pyenv"
+        description: "Python manager"
+        check: "pyenv --version"
+        install: "brew install pyenv"
+      
+      - name: "nvm"
+        description: "Node manager"
+        check: "nvm --version"
+        install: "brew install nvm"
+
+  - name: "Editors"
+    icon: "📝"
+    items:
+      - name: "VS Code"
+        description: "Code editor"
+        check: "code --version"
+        install: "brew install --cask visual-studio-code"
+      
+      - name: "Neovim"
+        description: "Vim fork"
+        check: "nvim --version"
+        install: "brew install neovim"
+
+  - name: "System"
+    icon: "⚙️"
+    items:
+      - name: "btop"
+        description: "System monitor"
+        check: "btop --version"
+        install: "brew install btop"
+      
+      - name: "yazi"
+        description: "File manager"
+        check: "yazi --version"
+        install: "brew install yazi"
+      
+      - name: "lazygit"
+        description: "Git TUI"
+        check: "lazygit --version"
+        install: "brew install lazygit"

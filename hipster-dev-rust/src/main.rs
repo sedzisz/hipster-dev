@@ -5,58 +5,74 @@ use crossterm::{
 };
 use ratatui::{
     backend::{Backend, CrosstermBackend},
-    layout::{Alignment, Constraint, Direction, Layout, Margin, Rect},
+    layout::{Alignment, Constraint, Direction, Layout},
     style::{Color, Modifier, Style},
-    text::{Line, Span, Text},
-    widgets::{Block, Borders, Clear, List, ListItem, ListState, Paragraph, Wrap},
+    widgets::{Block, Borders, List, ListItem, ListState, Paragraph},
     Frame, Terminal,
 };
-use std::{error::Error, io};
+use serde::Deserialize;
+use std::{error::Error, fs, io, path::Path};
 
-#[derive(Debug, Clone)]
-struct Category {
-    name: &'static str,
-    icon: &'static str,
-    description: &'static str,
+// Config structures
+#[derive(Debug, Deserialize, Clone)]
+struct MenuConfig {
+    title: String,
+    #[serde(rename = "header_color")]
+    header_color: String,
+    #[serde(rename = "border_color")]
+    border_color: String,
+    categories: Vec<Category>,
 }
 
-const CATEGORIES: &[Category] = &[
-    Category { name: "Containers", icon: "🐳", description: "Docker, Podman, lazydocker" },
-    Category { name: "Cloud", icon: "☁️", description: "kubectl, AWS CLI, VPN" },
-    Category { name: "Shell", icon: "🐚", description: "zsh, oh-my-zsh, fonts" },
-    Category { name: "Dev Tools", icon: "🛠", description: "pyenv, nvm, sdkman" },
-    Category { name: "Editors", icon: "📝", description: "VS Code, Neovim, IntelliJ" },
-    Category { name: "System", icon: "⚙️", description: "btop, yazi, lazygit" },
-    Category { name: "Quit", icon: "👋", description: "Exit installer" },
-];
+#[derive(Debug, Deserialize, Clone)]
+struct Category {
+    name: String,
+    icon: String,
+    items: Vec<MenuItem>,
+}
 
+#[derive(Debug, Deserialize, Clone)]
+struct MenuItem {
+    name: String,
+    description: String,
+    check: String,
+    install: String,
+}
+
+// App State
 #[derive(Debug)]
 enum AppState {
     MainMenu,
-    CategoryMenu(String),
-    Installing(String),
+    CategoryMenu(usize),
 }
 
 #[derive(Debug)]
 struct App {
+    config: MenuConfig,
     state: AppState,
     list_state: ListState,
 }
 
 impl App {
-    fn new() -> App {
+    fn new(config: MenuConfig) -> App {
         let mut list_state = ListState::default();
         list_state.select(Some(0));
         App {
+            config,
             state: AppState::MainMenu,
             list_state,
         }
     }
 
     fn next(&mut self) {
+        let count = match &self.state {
+            AppState::MainMenu => self.config.categories.len() + 1, // +1 for Quit
+            AppState::CategoryMenu(idx) => self.config.categories[*idx].items.len() + 1, // +1 for Back
+        };
+        
         let i = match self.list_state.selected() {
             Some(i) => {
-                if i >= self.get_items().len() - 1 {
+                if i >= count - 1 {
                     0
                 } else {
                     i + 1
@@ -68,10 +84,15 @@ impl App {
     }
 
     fn previous(&mut self) {
+        let count = match &self.state {
+            AppState::MainMenu => self.config.categories.len() + 1,
+            AppState::CategoryMenu(idx) => self.config.categories[*idx].items.len() + 1,
+        };
+        
         let i = match self.list_state.selected() {
             Some(i) => {
                 if i == 0 {
-                    self.get_items().len() - 1
+                    count - 1
                 } else {
                     i - 1
                 }
@@ -80,42 +101,12 @@ impl App {
         };
         self.list_state.select(Some(i));
     }
-
-    fn get_items(&self) -> Vec<String> {
-        match &self.state {
-            AppState::MainMenu => CATEGORIES
-                .iter()
-                .map(|c| format!("{} {}", c.icon, c.name))
-                .collect(),
-            AppState::CategoryMenu(cat) => match cat.as_str() {
-                "Containers" => vec![
-                    "Docker Desktop".to_string(),
-                    "Podman".to_string(),
-                    "lazydocker".to_string(),
-                    "dive".to_string(),
-                    "Back".to_string(),
-                ],
-                "Cloud" => vec![
-                    "kubectl".to_string(),
-                    "k9s".to_string(),
-                    "AWS CLI".to_string(),
-                    "WireGuard".to_string(),
-                    "Back".to_string(),
-                ],
-                "Shell" => vec![
-                    "zsh".to_string(),
-                    "oh-my-zsh".to_string(),
-                    "Nerd Fonts".to_string(),
-                    "Back".to_string(),
-                ],
-                _ => vec!["Back".to_string()],
-            },
-            _ => vec![],
-        }
-    }
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
+    // Load config
+    let config = load_config()?;
+
     // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
@@ -124,7 +115,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut terminal = Terminal::new(backend)?;
 
     // Create app
-    let app = App::new();
+    let app = App::new(config);
     let res = run_app(&mut terminal, app);
 
     // Restore terminal
@@ -137,10 +128,27 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal.show_cursor()?;
 
     if let Err(err) = res {
-        println!("{:?}", err);
+        println!("Error: {:?}", err);
     }
 
     Ok(())
+}
+
+fn load_config() -> Result<MenuConfig, Box<dyn Error>> {
+    // Try to load from current directory
+    let paths = ["menu.yaml", "config.yaml", "~/.config/hipster-dev/menu.yaml"];
+    
+    for path in &paths {
+        let expanded = shellexpand::tilde(path);
+        if Path::new(expanded.as_ref()).exists() {
+            let content = fs::read_to_string(expanded.as_ref())?;
+            let config: MenuConfig = serde_yaml::from_str(&content)?;
+            return Ok(config);
+        }
+    }
+    
+    // Fallback to default config
+    Err("No config file found. Create menu.yaml".into())
 }
 
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<()> {
@@ -170,21 +178,23 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<(
                         if let Some(selected) = app.list_state.selected() {
                             match &app.state {
                                 AppState::MainMenu => {
-                                    if selected == CATEGORIES.len() - 1 {
-                                        return Ok(());
+                                    if selected == app.config.categories.len() {
+                                        return Ok(()); // Quit selected
                                     }
-                                    let cat = CATEGORIES[selected].name.to_string();
-                                    app.state = AppState::CategoryMenu(cat);
+                                    app.state = AppState::CategoryMenu(selected);
                                     app.list_state.select(Some(0));
                                 }
-                                AppState::CategoryMenu(_) => {
-                                    let items = app.get_items();
-                                    if selected == items.len() - 1 {
+                                AppState::CategoryMenu(cat_idx) => {
+                                    let cat = &app.config.categories[*cat_idx];
+                                    if selected == cat.items.len() {
                                         app.state = AppState::MainMenu;
                                         app.list_state.select(Some(0));
+                                    } else {
+                                        // Show install command
+                                        let item = &cat.items[selected];
+                                        // TODO: Actually run the install
                                     }
                                 }
-                                _ => {}
                             }
                         }
                     }
@@ -195,7 +205,20 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<(
     }
 }
 
+fn parse_color(hex: &str) -> Color {
+    if hex.starts_with('#') && hex.len() == 7 {
+        let r = u8::from_str_radix(&hex[1..3], 16).unwrap_or(255);
+        let g = u8::from_str_radix(&hex[3..5], 16).unwrap_or(255);
+        let b = u8::from_str_radix(&hex[5..7], 16).unwrap_or(255);
+        return Color::Rgb(r, g, b);
+    }
+    Color::White
+}
+
 fn ui(f: &mut Frame, app: &mut App) {
+    let header_color = parse_color(&app.config.header_color);
+    let border_color = parse_color(&app.config.border_color);
+
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
@@ -207,37 +230,57 @@ fn ui(f: &mut Frame, app: &mut App) {
         .split(f.area());
 
     // Header
-    let header = Paragraph::new("🎩  HIPSTER DEV INSTALLER")
-        .style(Style::default().fg(Color::Rgb(255, 107, 107)).add_modifier(Modifier::BOLD))
+    let header = Paragraph::new(app.config.title.clone())
+        .style(Style::default().fg(header_color).add_modifier(Modifier::BOLD))
         .alignment(Alignment::Center);
     f.render_widget(header, chunks[0]);
 
-    // Main content
-    let app_items = app.get_items();
-    let items: Vec<ListItem> = app_items
-        .iter()
-        .map(|i| {
-            ListItem::new(i.as_str()).style(Style::default().fg(Color::Rgb(234, 234, 234)))
-        })
-        .collect();
+    // Get items based on state
+    let items: Vec<ListItem> = match &app.state {
+        AppState::MainMenu => {
+            let mut items: Vec<ListItem> = app
+                .config
+                .categories
+                .iter()
+                .map(|cat| {
+                    ListItem::new(format!("{}  {}", cat.icon, cat.name))
+                        .style(Style::default().fg(Color::White))
+                })
+                .collect();
+            items.push(ListItem::new("👋  Quit").style(Style::default().fg(Color::White)));
+            items
+        }
+        AppState::CategoryMenu(idx) => {
+            let cat = &app.config.categories[*idx];
+            let mut items: Vec<ListItem> = cat
+                .items
+                .iter()
+                .map(|item| {
+                    ListItem::new(format!("{}  - {}", item.name, item.description))
+                        .style(Style::default().fg(Color::White))
+                })
+                .collect();
+            items.push(ListItem::new("↩  Back").style(Style::default().fg(Color::White)));
+            items
+        }
+    };
 
     let title = match &app.state {
-        AppState::MainMenu => " Select Category ".to_string(),
-        AppState::CategoryMenu(cat) => format!(" {} ", cat),
-        _ => "".to_string(),
+        AppState::MainMenu => " Select Category ",
+        AppState::CategoryMenu(idx) => &format!(" {} ", app.config.categories[*idx].name),
     };
 
     let list = List::new(items)
         .block(
             Block::default()
                 .borders(Borders::ALL)
-                .border_style(Style::default().fg(Color::Rgb(78, 205, 196)))
+                .border_style(Style::default().fg(border_color))
                 .title(title)
-                .title_style(Style::default().fg(Color::Rgb(78, 205, 196)).add_modifier(Modifier::BOLD)),
+                .title_style(Style::default().fg(border_color).add_modifier(Modifier::BOLD)),
         )
         .highlight_style(
             Style::default()
-                .bg(Color::Rgb(78, 205, 196))
+                .bg(border_color)
                 .fg(Color::Rgb(26, 26, 46))
                 .add_modifier(Modifier::BOLD),
         )
@@ -249,7 +292,6 @@ fn ui(f: &mut Frame, app: &mut App) {
     let help = match app.state {
         AppState::MainMenu => "↑/↓ navigate  •  enter select  •  q quit",
         AppState::CategoryMenu(_) => "↑/↓ navigate  •  enter select  •  esc/q back",
-        _ => "",
     };
     let help_text = Paragraph::new(help)
         .style(Style::default().fg(Color::Rgb(102, 102, 102)))

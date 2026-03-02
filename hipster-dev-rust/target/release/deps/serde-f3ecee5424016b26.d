@@ -1,0 +1,14 @@
+/Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/deps/serde-f3ecee5424016b26.d: /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/build/serde-0591476c2a6b551e/out/private.rs
+
+/Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/deps/libserde-f3ecee5424016b26.rlib: /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/build/serde-0591476c2a6b551e/out/private.rs
+
+/Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/deps/libserde-f3ecee5424016b26.rmeta: /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/build/serde-0591476c2a6b551e/out/private.rs
+
+/Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/Users/sedzisz/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/build/serde-0591476c2a6b551e/out/private.rs:
+
+# env-dep:OUT_DIR=/Users/sedzisz/Workspace/hipster-dev/hipster-dev-rust/target/release/build/serde-0591476c2a6b551e/out

@@ -9,7 +9,7 @@
 set -euo pipefail
 
 # Configuration
-REPO_URL="https://github.com/sedzisz/hipster-dev.git"
+REPO_URL="git@github.com:sedzisz/hipster-dev.git"
 INSTALL_DIR="$HOME/.local/share/hipster-dev"
 BRANCH="main"
 

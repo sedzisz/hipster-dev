@@ -221,6 +221,19 @@ install_toolname() {
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## 🏗 Development (SSH)
+
+If you want to contribute or modify locally using SSH:
+
+```bash
+# Clone via SSH
+git clone git@github.com:sedzisz/hipster-dev.git
+
+# Or add remote via SSH
+git remote add origin git@github.com:sedzisz/hipster-dev.git
+git push -u origin main
+```
+
 ## 📝 License
 
 MIT License - see [LICENSE](LICENSE) file

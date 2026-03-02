@@ -22,11 +22,27 @@ Interactive development environment setup tool for macOS. Install all your favor
 
 ### One-liner installation (recommended)
 
+The easiest way - just copy-paste this into your terminal:
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/sedzisz/hipster-dev/main/bootstrap.sh | bash
 ```
 
-With options:
+**What this does:**
+1. Downloads `bootstrap.sh` via HTTPS (port 443 - standard HTTP)
+2. Executes it immediately in bash
+3. Bootstrap clones the full repo via SSH (`git@github.com:sedzisz/hipster-dev.git`)
+4. Runs the interactive installer
+5. Cleans up downloaded files
+
+**Why this works:**
+- `curl` downloads the script (uses HTTP/HTTPS - no auth needed)
+- `| bash` pipes it to bash for execution
+- Inside the script, `git clone` uses SSH (requires your SSH key for GitHub)
+- This way you don't need to authenticate curl, only git
+
+### With options
+
 ```bash
 # Keep downloaded files after installation
 curl -fsSL https://raw.githubusercontent.com/sedzisz/hipster-dev/main/bootstrap.sh | bash -s -- --keep
@@ -35,12 +51,26 @@ curl -fsSL https://raw.githubusercontent.com/sedzisz/hipster-dev/main/bootstrap.
 curl -fsSL https://raw.githubusercontent.com/sedzisz/hipster-dev/main/bootstrap.sh | bash -s -- --help
 ```
 
-### Or clone and run locally
+### Security note
+
+If you're concerned about piping curl to bash (which is generally safe from trusted sources, but...):
 
 ```bash
-git clone https://github.com/yourusername/hipster-dev.git
+# 1. Download first, inspect, then run:
+curl -fsSL https://raw.githubusercontent.com/sedzisz/hipster-dev/main/bootstrap.sh -o bootstrap.sh
+cat bootstrap.sh  # Look at what it does
+bash bootstrap.sh
+
+# 2. Or clone and run locally (requires SSH key):
+git clone git@github.com:sedzisz/hipster-dev.git
 cd hipster-dev
-chmod +x install.sh
+./install.sh
+```
+
+### Local development
+
+```bash
+cd /path/to/hipster-dev
 ./install.sh
 ```
 

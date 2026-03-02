@@ -28,17 +28,15 @@ source "${SCRIPT_DIR}/modules/devtools.sh"
 source "${SCRIPT_DIR}/modules/editors.sh"
 source "${SCRIPT_DIR}/modules/system.sh"
 
-# Main categories
-declare -A CATEGORIES=(
-    ["1"]="Containers          - Docker, Podman"
-    ["2"]="Cloud Tools         - AWS, kubectl"
-    ["3"]="Shell & Terminal    - zsh, fonts, oh-my-zsh"
-    ["4"]="Dev Tools           - pyenv, nvm, sdkman, brew"
-    ["5"]="Editors             - Neovim, Kickstart"
-    ["6"]="System Utilities    - btop, htop, lazydocker, yazi"
-    ["7"]="Install ALL at once"
-    ["q"]="Quit"
-)
+# Main categories (simple variables to avoid bash 3.2 compatibility issues)
+CATEGORY_1="Containers          - Docker, Podman"
+CATEGORY_2="Cloud Tools         - AWS, kubectl"
+CATEGORY_3="Shell & Terminal    - zsh, fonts, oh-my-zsh"
+CATEGORY_4="Dev Tools           - pyenv, nvm, sdkman, brew"
+CATEGORY_5="Editors             - Neovim, Kickstart"
+CATEGORY_6="System Utilities    - btop, htop, lazydocker, yazi"
+CATEGORY_7="Install ALL at once"
+CATEGORY_q="Quit"
 
 show_banner() {
     clear

@@ -126,6 +126,10 @@ install_all() {
     # Editors
     install_neovim
     install_neovim_kickstart
+    install_vscode
+    install_intellij
+    install_eclipse
+    install_netbeans
     
     # System Utilities
     install_btop

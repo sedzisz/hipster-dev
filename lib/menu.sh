@@ -230,6 +230,10 @@ run_editors_menu() {
     local options=(
         "neovim      - Neovim editor"
         "kickstart   - Neovim Kickstart configuration"
+        "vscode      - Visual Studio Code + extensions"
+        "intellij    - IntelliJ IDEA Community Edition"
+        "eclipse     - Eclipse IDE for Java Developers"
+        "netbeans    - Apache NetBeans IDE"
     )
     
     local selected
@@ -240,6 +244,10 @@ run_editors_menu() {
         case "$item" in
             *neovim*) install_neovim ;;
             *kickstart*) install_neovim_kickstart ;;
+            *vscode*) install_vscode ;;
+            *intellij*) install_intellij ;;
+            *eclipse*) install_eclipse ;;
+            *netbeans*) install_netbeans ;;
         esac
     done <<< "$selected"
 }

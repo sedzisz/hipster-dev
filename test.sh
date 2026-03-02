@@ -143,6 +143,7 @@ list_functions() {
     
     echo -e "\n${YELLOW}Editors:${NC}"
     echo "  install_neovim, install_neovim_kickstart"
+    echo "  install_vscode, install_intellij, install_eclipse, install_netbeans"
     
     echo -e "\n${YELLOW}System Utilities:${NC}"
     echo "  install_btop, install_htop, install_dust, install_duf, install_procs"
@@ -201,6 +202,10 @@ install_single() {
         sdkman) install_sdkman ;;
         neovim|nvim) install_neovim ;;
         kickstart) install_neovim_kickstart ;;
+        vscode|code) install_vscode ;;
+        intellij|idea) install_intellij ;;
+        eclipse) install_eclipse ;;
+        netbeans) install_netbeans ;;
         btop) install_btop ;;
         htop) install_htop ;;
         dust) install_dust ;;

@@ -225,7 +225,7 @@ install_netbeans() {
     
     print_info "Installing Apache NetBeans..."
     
-    if brew install --cask apache-netbeans; then
+    if brew install --cask netbeans; then
         print_success "Apache NetBeans installed successfully"
         print_info "Supports: Java, PHP, JavaScript, Groovy, C/C++"
     else

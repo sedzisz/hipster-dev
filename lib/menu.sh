@@ -11,12 +11,12 @@ has_fzf() {
 # Show main menu
 show_main_menu() {
     local options=(
-        "1) 🐳  Containers       │ Docker, Podman"
-        "2) ☁️   Cloud Tools      │ kubectl, AWS, VPNs"
-        "3) 🐚  Shell & Terminal │ zsh, oh-my-zsh, fonts"
-        "4) 🛠   Dev Tools        │ pyenv, nvm, sdkman, brew"
-        "5) 📝  Editors          │ VS Code, IntelliJ, Neovim"
-        "6) ⚙️   System Utilities │ btop, yazi, terminals"
+        "1) 🐳  Containers           │ Docker, Podman"
+        "2) ☁️  Cloud Tools          │ kubectl, AWS, VPNs"
+        "3) 🐚  Shell & Terminal     │ zsh, oh-my-zsh, fonts"
+        "4) 🛠   Dev Tools            │ pyenv, nvm, sdkman, brew"
+        "5) 📝  Editors              │ VS Code, IntelliJ, Neovim"
+        "6) ⚙️  System Utilities     │ btop, yazi, terminals"
         "7) 🚀  Install ALL at once"
         "q) 👋  Quit"
     )
@@ -131,9 +131,11 @@ run_container_menu() {
         print_section "Container Tools"
         
         local options=(
-            "docker      - Docker Desktop & CLI"
-            "podman      - Podman with docker alias"
-            "back        - Return to main menu"
+            "docker     │ Docker Desktop & CLI"
+            "podman     │ Podman with docker alias"
+            "lazydocker │ TUI for Docker management"
+            "dive       │ Docker image analyzer"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -149,6 +151,8 @@ run_container_menu() {
             case "$item" in
                 *docker*) install_docker ;;
                 *podman*) install_podman ;;
+                *lazydocker*) install_lazydocker ;;
+                *dive*) install_dive ;;
             esac
         done <<< "$selected"
         
@@ -163,13 +167,13 @@ run_cloud_menu() {
         print_section "Cloud Tools"
         
         local options=(
-            "kubectl     - Kubernetes CLI"
-            "k9s         - Kubernetes TUI (interactive k8s dashboard)"
-            "aws-cli     - AWS Command Line Interface"
-            "aws-vpn     - AWS VPN Client"
-            "wireguard   - Modern, fast, secure VPN"
-            "openvpn     - OpenVPN + Tunnelblick GUI"
-            "back        - Return to main menu"
+            "kubectl    │ Kubernetes CLI"
+            "k9s        │ Kubernetes TUI (interactive k8s dashboard)"
+            "aws-cli    │ AWS Command Line Interface"
+            "aws-vpn    │ AWS VPN Client"
+            "wireguard  │ Modern, fast, secure VPN"
+            "openvpn    │ OpenVPN + Tunnelblick GUI"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -202,10 +206,10 @@ run_shell_menu() {
         print_section "Shell & Terminal"
         
         local options=(
-            "zsh         - Z Shell"
-            "oh-my-zsh   - Oh My Zsh framework"
-            "nerd-fonts  - Nerd Fonts (Meslo, Hack)"
-            "back        - Return to main menu"
+            "zsh        │ Z Shell"
+            "oh-my-zsh  │ Oh My Zsh framework"
+            "nerd-fonts │ Nerd Fonts (Meslo, Hack)"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -235,11 +239,11 @@ run_devtools_menu() {
         print_section "Development Tools"
         
         local options=(
-            "brew        - Homebrew package manager"
-            "pyenv       - Python version manager"
-            "nvm         - Node Version Manager"
-            "sdkman      - SDK Manager (Java, Kotlin, etc.)"
-            "back        - Return to main menu"
+            "brew       │ Homebrew package manager"
+            "pyenv      │ Python version manager"
+            "nvm        │ Node Version Manager"
+            "sdkman     │ SDK Manager (Java, Kotlin, etc.)"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -270,13 +274,13 @@ run_editors_menu() {
         print_section "Editors"
         
         local options=(
-            "neovim      - Neovim editor"
-            "kickstart   - Neovim Kickstart configuration"
-            "vscode      - Visual Studio Code + extensions"
-            "intellij    - IntelliJ IDEA Community Edition"
-            "eclipse     - Eclipse IDE for Java Developers"
-            "netbeans    - Apache NetBeans IDE"
-            "back        - Return to main menu"
+            "neovim     │ Neovim editor"
+            "kickstart  │ Neovim Kickstart configuration"
+            "vscode     │ Visual Studio Code + extensions"
+            "intellij   │ IntelliJ IDEA Community Edition"
+            "eclipse    │ Eclipse IDE for Java Developers"
+            "netbeans   │ Apache NetBeans IDE"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -309,20 +313,19 @@ run_system_menu() {
         print_section "System Utilities"
         
         local options=(
-            "btop        - Modern system monitor (better top)"
-            "htop        - Interactive process viewer"
-            "dust        - Disk usage analyzer (better du)"
-            "duf         - Disk usage/free utility"
-            "procs       - Modern replacement for ps"
-            "lazydocker  - TUI for Docker management"
-            "lazygit     - TUI for Git"
-            "yazi        - Blazing fast terminal file manager"
-            "zellij      - Terminal workspace/multiplexer"
-            "ghostty     - Modern, fast terminal emulator"
-            "alacritty   - GPU-accelerated terminal"
-            "wezterm     - GPU terminal with lua config"
-            "kitty       - Fast, feature-rich terminal"
-            "back        - Return to main menu"
+            "btop       │ Modern system monitor (better top)"
+            "htop       │ Interactive process viewer"
+            "dust       │ Disk usage analyzer (better du)"
+            "duf        │ Disk usage/free utility"
+            "procs      │ Modern replacement for ps"
+            "lazygit    │ TUI for Git"
+            "yazi       │ Blazing fast terminal file manager"
+            "zellij     │ Terminal workspace/multiplexer"
+            "ghostty    │ Modern, fast terminal emulator"
+            "alacritty  │ GPU-accelerated terminal"
+            "wezterm    │ GPU terminal with lua config"
+            "kitty      │ Fast, feature-rich terminal"
+            "back       │ Return to main menu"
         )
         
         local selected
@@ -340,7 +343,6 @@ run_system_menu() {
                 *dust*) install_dust ;;
                 *duf*) install_duf ;;
                 *procs*) install_procs ;;
-                *lazydocker*) install_lazydocker ;;
                 *lazygit*) install_lazygit ;;
                 *yazi*) install_yazi ;;
                 *zellij*) install_zellij ;;

@@ -28,13 +28,13 @@ show_help() {
     echo "Hipster Dev Installer - Test Script"
     echo ""
     echo "Usage:"
-    echo "  ./test.sh syntax      - Sprawdź składnię wszystkich plików"
-    echo "  ./test.sh check       - Sprawdź co jest już zainstalowane"
-    echo "  ./test.sh list        - Lista dostępnych funkcji instalacyjnych"
-    echo "  ./test.sh dry-run     - Symulacja (pokazuje co by zainstalował)"
-    echo "  ./test.sh install X   - Zainstaluj konkretne narzędzie (np: btop)"
+    echo "  ./test.sh syntax      - Check syntax of all files"
+    echo "  ./test.sh check       - Check what is already installed"
+    echo "  ./test.sh list        - List available install functions"
+    echo "  ./test.sh dry-run     - Simulation (shows what would be installed)"
+    echo "  ./test.sh install X   - Install specific tool (e.g.: btop)"
     echo ""
-    echo "Przykłady:"
+    echo "Examples:"
     echo "  ./test.sh syntax"
     echo "  ./test.sh check"
     echo "  ./test.sh install btop"
@@ -42,7 +42,7 @@ show_help() {
 }
 
 test_syntax() {
-    echo -e "${BLUE}Sprawdzanie składni...${NC}"
+    echo -e "${BLUE}Checking syntax...${NC}"
     local errors=0
     
     for f in install.sh bootstrap.sh lib/*.sh modules/*.sh; do
@@ -50,22 +50,22 @@ test_syntax() {
             if bash -n "$f" 2>/dev/null; then
                 echo -e "${GREEN}✓${NC} $f"
             else
-                echo -e "${RED}✗${NC} $f - BŁĄD SKŁADNI!"
+                echo -e "${RED}✗${NC} $f - SYNTAX ERROR!"
                 ((errors++))
             fi
         fi
     done
     
     if [[ $errors -eq 0 ]]; then
-        echo -e "\n${GREEN}✓ Wszystkie pliki mają poprawną składnię!${NC}"
+        echo -e "\n${GREEN}✓ All files have correct syntax!${NC}"
     else
-        echo -e "\n${RED}✗ Znaleziono $errors błędów${NC}"
+        echo -e "\n${RED}✗ Found $errors errors${NC}"
         exit 1
     fi
 }
 
 test_check_installed() {
-    echo -e "${BLUE}Sprawdzanie zainstalowanych narzędzi...${NC}\n"
+    echo -e "${BLUE}Checking installed tools...${NC}\n"
     
     echo -e "${YELLOW}Containers:${NC}"
     check_installed docker || true
@@ -124,10 +124,10 @@ test_check_installed() {
 }
 
 list_functions() {
-    echo -e "${BLUE}Dostępne funkcje instalacyjne:${NC}\n"
+    echo -e "${BLUE}Available install functions:${NC}\n"
     
     echo -e "${YELLOW}Containers:${NC}"
-    echo "  install_docker, install_podman"
+    echo "  install_docker, install_podman, install_lazydocker, install_dive"
     
     echo -e "\n${YELLOW}Cloud:${NC}"
     echo "  install_kubectl, install_k9s"
@@ -147,26 +147,26 @@ list_functions() {
     
     echo -e "\n${YELLOW}System Utilities:${NC}"
     echo "  install_btop, install_htop, install_dust, install_duf, install_procs"
-    echo "  install_lazydocker, install_lazygit, install_yazi, install_zellij"
+    echo "  install_lazygit, install_yazi, install_zellij"
     echo "  install_ghostty, install_alacritty, install_wezterm, install_kitty"
 }
 
 dry_run() {
     echo -e "${YELLOW}=== DRY RUN MODE ===${NC}"
-    echo "Pokazuję co by się zainstalowało (bez faktycznej instalacji):\n"
+    echo "Showing what would be installed (without actual installation):\n"
     
     detect_os
     echo "OS: $(detect_os)"
     echo ""
     
-    # Sprawdź Homebrew
+    # Check Homebrew
     if ! command -v brew &> /dev/null; then
-        echo -e "${YELLOW}[WOULD INSTALL]${NC} Homebrew (wymagane dla większości narzędzi)"
+        echo -e "${YELLOW}[WOULD INSTALL]${NC} Homebrew (required for most tools)"
     else
-        echo -e "${GREEN}[OK]${NC} Homebrew już zainstalowany"
+        echo -e "${GREEN}[OK]${NC} Homebrew already installed"
     fi
     
-    # Lista narzędzi do sprawdzenia
+    # List of tools to check
     local tools=("docker" "kubectl" "aws" "zsh" "nvim" "btop" "yazi")
     
     echo ""
@@ -187,6 +187,8 @@ install_single() {
     case "$tool" in
         docker) install_docker ;;
         podman) install_podman ;;
+        lazydocker) install_lazydocker ;;
+        dive) install_dive ;;
         kubectl) install_kubectl ;;
         k9s) install_k9s ;;
         aws-cli|aws) install_aws_cli ;;
@@ -219,9 +221,9 @@ install_single() {
         alacritty) install_alacritty ;;
         wezterm) install_wezterm ;;
         kitty) install_kitty ;;
-        *)
-            echo -e "${RED}Nieznane narzędzie: $tool${NC}"
-            echo "Użyj: ./test.sh list - aby zobaczyć dostępne"
+            *)
+            echo -e "${RED}Unknown tool: $tool${NC}"
+            echo "Use: ./test.sh list - to see available"
             exit 1
             ;;
     esac
@@ -243,8 +245,8 @@ case "${1:-}" in
         ;;
     install)
         if [[ -z "${2:-}" ]]; then
-            echo "Użycie: ./test.sh install <nazwa-narzędzia>"
-            echo "Przykład: ./test.sh install btop"
+            echo "Usage: ./test.sh install <tool-name>"
+            echo "Example: ./test.sh install btop"
             exit 1
         fi
         install_single "$2"

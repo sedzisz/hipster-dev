@@ -41,20 +41,13 @@ CATEGORY_q="Quit"
 show_banner() {
     clear
     echo -e "${CYAN}"
-    cat << 'EOF'
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   ██╗  ██╗██╗██████╗ ███████╗████████╗███████╗██████╗        ║
-║   ██║  ██║██║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗       ║
-║   ███████║██║██████╔╝███████╗   ██║   █████╗  ██████╔╝       ║
-║   ██╔══██║██║██╔═══╝ ╚════██║   ██║   ██╔══╝  ██╔══██╗       ║
-║   ██║  ██║██║██║     ███████║   ██║   ███████╗██║  ██║       ║
-║   ╚═╝  ╚═╝╚═╝╚═╝     ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝       ║
-║                                                               ║
-║           🚀 Dev Environment Setup Tool 🚀                    ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
-EOF
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║                                                              ║"
+    echo "║            HIPSTER DEV ENVIRONMENT INSTALLER                 ║"
+    echo "║                                                              ║"
+    echo "║                   🚀  Version 1.0  🚀                        ║"
+    echo "║                                                              ║"
+    echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     echo -e "${YELLOW}Detected OS: $(detect_os)${NC}\n"
 }
@@ -103,6 +96,8 @@ install_all() {
     # Containers
     install_docker
     install_podman
+    install_lazydocker
+    install_dive
     
     # Cloud
     install_kubectl
@@ -137,7 +132,6 @@ install_all() {
     install_dust
     install_duf
     install_procs
-    install_lazydocker
     install_lazygit
     install_yazi
     install_zellij

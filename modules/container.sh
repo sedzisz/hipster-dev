@@ -89,3 +89,65 @@ install_podman() {
         return 1
     fi
 }
+
+install_lazydocker() {
+    print_section "LazyDocker Installation"
+    
+    if check_installed lazydocker; then
+        if confirm "LazyDocker is already installed. Reinstall?"; then
+            print_info "Proceeding with LazyDocker installation..."
+        else
+            print_info "Skipping LazyDocker installation"
+            return 0
+        fi
+    fi
+    
+    require_macos
+    ensure_brew
+    
+    print_info "Installing LazyDocker (TUI for Docker)..."
+    
+    if brew install lazydocker; then
+        print_success "LazyDocker installed successfully"
+        print_info "Run: lazydocker - manage containers with TUI"
+    else
+        print_error "Failed to install LazyDocker"
+        return 1
+    fi
+}
+
+install_dive() {
+    print_section "Dive Installation"
+    
+    if check_installed dive; then
+        if confirm "Dive is already installed. Reinstall?"; then
+            print_info "Proceeding with Dive installation..."
+        else
+            print_info "Skipping Dive installation"
+            return 0
+        fi
+    fi
+    
+    require_macos
+    ensure_brew
+    
+    print_info "Installing Dive (Docker image analyzer)..."
+    
+    if brew install dive; then
+        print_success "Dive installed successfully"
+        print_info ""
+        print_info "🔍 Dive - A tool for exploring Docker images"
+        print_info ""
+        print_info "Usage:"
+        print_info "  dive <image>     - Analyze a Docker image"
+        print_info "  dive build -t myapp .  - Analyze during build"
+        print_info ""
+        print_info "Keys:"
+        print_info "  Tab    - Switch layers/files"
+        print_info "  Space  - Filter files"
+        print_info "  Ctrl+C - Quit"
+    else
+        print_error "Failed to install Dive"
+        return 1
+    fi
+}

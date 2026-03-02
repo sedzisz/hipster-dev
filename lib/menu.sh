@@ -53,7 +53,7 @@ show_fzf_menu() {
         --layout=reverse \
         --border \
         --prompt="$title " \
-        --header="Use arrow keys to navigate, Enter to select"
+        --header="Use arrow keys to navigate, Enter to select" || true
 }
 
 # FZF multi-select menu
@@ -68,7 +68,7 @@ show_fzf_multi_menu() {
         --border \
         --multi \
         --prompt="$title " \
-        --header="Tab to select multiple, Enter to confirm"
+        --header="Tab to select multiple, Enter to confirm" || true
 }
 
 # Bash fallback single select menu

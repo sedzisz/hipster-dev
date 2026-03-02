@@ -94,11 +94,13 @@ install_lazydocker() {
     print_section "LazyDocker Installation"
     
     if check_installed lazydocker; then
-        if confirm "LazyDocker is already installed. Reinstall?"; then
-            print_info "Proceeding with LazyDocker installation..."
-        else
-            print_info "Skipping LazyDocker installation"
-            return 0
+        if confirm "LazyDocker is already installed. Reinstall?" || true; then
+            if [[ $? -eq 0 ]]; then
+                print_info "Proceeding with LazyDocker installation..."
+            else
+                print_info "Skipping LazyDocker installation"
+                return 0
+            fi
         fi
     fi
     

@@ -142,7 +142,7 @@ run_container_menu() {
         selected=$(show_checkbox_menu "Select container tools to install:" "${options[@]}")
         
         # Check if back was selected
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         
@@ -179,7 +179,7 @@ run_cloud_menu() {
         local selected
         selected=$(show_checkbox_menu "Select cloud tools to install:" "${options[@]}")
         
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         
@@ -215,7 +215,7 @@ run_shell_menu() {
         local selected
         selected=$(show_checkbox_menu "Select shell tools to install:" "${options[@]}")
         
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         
@@ -249,7 +249,7 @@ run_devtools_menu() {
         local selected
         selected=$(show_checkbox_menu "Select dev tools to install:" "${options[@]}")
         
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         
@@ -286,7 +286,7 @@ run_editors_menu() {
         local selected
         selected=$(show_checkbox_menu "Select editors to install:" "${options[@]}")
         
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         
@@ -331,7 +331,7 @@ run_system_menu() {
         local selected
         selected=$(show_checkbox_menu "Select system utilities to install:" "${options[@]}")
         
-        if echo "$selected" | grep -q "back"; then
+        if [[ "$selected" == *"back"* ]]; then
             return 0
         fi
         

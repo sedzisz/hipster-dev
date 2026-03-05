@@ -278,3 +278,4 @@ MIT License - see [LICENSE](LICENSE) file
 ---
 
 Made with 💜 for developers who love their terminal
+
